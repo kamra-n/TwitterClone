@@ -14,6 +14,7 @@ import {
 import { db } from "../firebase.config";
 
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+// import { Navigate } from "react-router-dom";
 
 
 
@@ -58,7 +59,7 @@ const loginUser = createAsyncThunk('twitter/loginUser', ((userLogin) => {
                 if (docSnap.exists()) {
                     console.log("Document data:", docSnap.data());
                     localStorage.setItem('login', JSON.stringify(docSnap.data()))
-
+                 
 
                 } else {
                     console.log("No such document!");
@@ -108,7 +109,7 @@ const getSingleUserTweets = createAsyncThunk("twitter/getSingleUserTweets", asyn
 
     const currentUid = JSON.parse(data);
     try {
-        const q = query(collection(db, "posts"), where("uid", "==", currentUid.uid));
+        const q = query(collection(db, "posts"), where("uid", "==", currentUid?.uid));
         const querySnapshot = await getDocs(q);
         const Data = [];
 

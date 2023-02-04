@@ -7,7 +7,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser, loginUser } from '../../store/TwitterSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
+
 
 
 import Button from '../../Components/Button/Button'
@@ -16,10 +17,28 @@ import {
 } from '../../assets'
 
 export default function Login() {
-    const { is_Login,isLoading } = useSelector((state) => state);
-    const navigate = useNavigate();
 
-   
+
+    const { is_Login } = useSelector((state) => state);
+    const navigate = useNavigate();
+    // const [checkIsLogin,setCheckIsLogin] = useState(false);
+    // if(is_Login){
+    //     setCheckIsLogin(true)
+    // }
+
+    // useEffect(()=>{
+    //     // setCheckIsLogin(true);   
+    //     if(is_Login){
+    //        return navigate('/')
+    //       }
+
+    //     // checkIsLogin &&  checkLogin()
+
+    //    return  console.log('hello from effect')
+    //     },[checkIsLogin])
+
+    //     console.log(is_Login)
+
 
 
     const [open, setOpen] = useState(false);
@@ -96,18 +115,20 @@ export default function Login() {
             }
             dispatch(loginUser(userLogin))
                 .unwrap()
-                .then((data) => {
-                    console.log(data);
+                .then(() => {
+                    navigate("/");
+                    // window.location.reload();
                 });
-            // if (is_Login) {
-            //     navigate('/')
-            // }
-            is_Login ? navigate('/') : ''
+
+
+
+
 
 
         }
 
     }
+
     const SignUpHandler = () => {
         if (nameRef.current.value === '' || emailRef.current.value === '' || userNameRef.current.value === '' || passwordRef.current.value === '' && passwordRef.current.value.length < 3) {
             nameRef.current.value === ''
@@ -148,6 +169,9 @@ export default function Login() {
 
 
 
+    if (is_Login) {
+        return <Navigate to="/" />;
+    }
 
 
     return (
