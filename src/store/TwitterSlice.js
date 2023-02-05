@@ -57,8 +57,7 @@ const loginUser = createAsyncThunk('twitter/loginUser', ((userLogin) => {
             console.log(user.uid)
             getDoc(doc(db, "users", user.uid)).then(docSnap => {
                 if (docSnap.exists()) {
-                    console.log("Document data:", docSnap.data());
-                    localStorage.setItem('login', JSON.stringify(docSnap.data()))
+                   return localStorage.setItem('login', JSON.stringify(docSnap.data()))
                  
 
                 } else {
@@ -133,7 +132,6 @@ const getSingleUserTweets = createAsyncThunk("twitter/getSingleUserTweets", asyn
 
 const initialState = {
     isLoading: false,
-    is_Login: false,
     dataList: {
         allTweets: [],
         singleUserTweets: [],
@@ -161,7 +159,6 @@ export const twitterSlice = createSlice({
             state.isLoading = true;
         });
         builder.addCase(loginUser.fulfilled, (state, action) => {
-            state.is_Login = true;
             state.isLoading = false;
 
 
@@ -200,7 +197,6 @@ export const twitterSlice = createSlice({
         });
         builder.addCase(getSingleUserTweets.fulfilled, (state, action) => {
             state.isLoading = false;
-            console.log('single', action?.payload)
             state.dataList.singleUserTweets = action.payload?.reverse();
         });
         builder.addCase(getSingleUserTweets.rejected, (state, { payload }) => {

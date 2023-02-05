@@ -5,9 +5,9 @@ import { storage } from '../../firebase.config';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { registerUser, loginUser } from '../../store/TwitterSlice';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -17,29 +17,7 @@ import {
 } from '../../assets'
 
 export default function Login() {
-
-
-    const { is_Login } = useSelector((state) => state);
-    const navigate = useNavigate();
-    // const [checkIsLogin,setCheckIsLogin] = useState(false);
-    // if(is_Login){
-    //     setCheckIsLogin(true)
-    // }
-
-    // useEffect(()=>{
-    //     // setCheckIsLogin(true);   
-    //     if(is_Login){
-    //        return navigate('/')
-    //       }
-
-    //     // checkIsLogin &&  checkLogin()
-
-    //    return  console.log('hello from effect')
-    //     },[checkIsLogin])
-
-    //     console.log(is_Login)
-
-
+    const navigate = useNavigate(); 
 
     const [open, setOpen] = useState(false);
 
@@ -51,7 +29,6 @@ export default function Login() {
     const [file, setFile] = useState('');
     const [imageUrl, setImageUrl] = useState()
 
-    console.log('imageUrl', imageUrl)
 
     useEffect(() => {
         const uploadFile = () => {
@@ -100,6 +77,7 @@ export default function Login() {
     const passwordRef = useRef(null);
     const dispatch = useDispatch();
 
+
     const LoginHandler = () => {
 
         if (passwordRef.current.value === '' || emailRef.current.value === '') {
@@ -114,16 +92,17 @@ export default function Login() {
 
             }
             dispatch(loginUser(userLogin))
-                .unwrap()
-                .then(() => {
-                    navigate("/");
-                    // window.location.reload();
+                .then((data) => {
+                    setTimeout(()=>{
+                        if(data.type === 'twitter/loginUser/fulfilled'){
+                            navigate('/')
+                            window.location.reload()
+                            console.log('im running')
+                        }
+                       
+                    },3000)                
+
                 });
-
-
-
-
-
 
         }
 
@@ -166,12 +145,6 @@ export default function Login() {
     const handleCancel = () => {
         setOpen(false);
     };
-
-
-
-    if (is_Login) {
-        return <Navigate to="/" />;
-    }
 
 
     return (
